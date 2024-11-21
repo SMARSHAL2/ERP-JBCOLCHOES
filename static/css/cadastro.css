@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+}
+
+h2 {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.btn-dark {
+    background-color: #4a4a4a;
+    border: none;
+}
+
+.btn-dark:hover {
+    background-color: #333;
+}
+
+.form-control {
+    border-radius: 8px;
+}
+
+.container form {
+    max-width: 600px;
+    margin: auto;
+}

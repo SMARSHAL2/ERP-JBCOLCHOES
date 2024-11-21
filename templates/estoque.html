@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Estoque</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estoque.css') }}">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <a class="navbar-brand ms-3" href="/">JB Colchões ERP</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="/">Cadastro de Produtos</a>
+            <a class="nav-link" href="{{ url_for('estoque') }}">Controle de Estoque</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="text-center text-dark">Controle de Estoque</h2>
+
+        <!-- Formulário de Busca com Filtros Adicionais -->
+        <form method="get" action="{{ url_for('estoque') }}" class="row mb-4">
+            <div class="col-md-2 mb-2">
+                <input type="text" name="codigo_interno" class="form-control" placeholder="Código Interno" value="{{ codigo_interno }}">
+            </div>
+            <div class="col-md-4 mb-2">
+                <input type="text" name="codigo_barras" class="form-control" placeholder="Código de Barras" value="{{ codigo_barras }}">
+            </div>
+            <div class="col-md-4 mb-2">
+                <input type="text" name="busca" class="form-control" placeholder="Buscar por descrição..." value="{{ busca }}">
+            </div>
+            <div class="col-md-2 mb-2">
+                <select name="categoria" class="form-select">
+                    <option value="">Todas as Categorias</option>
+                    <option value="Colchão" {% if categoria == "Colchão" %}selected{% endif %}>Colchão</option>
+                    <option value="Enxoval" {% if categoria == "Enxoval" %}selected{% endif %}>Enxoval</option>
+                    <option value="Cama" {% if categoria == "Cama" %}selected{% endif %}>Cama</option>
+                    <option value="Mesa" {% if categoria == "Mesa" %}selected{% endif %}>Mesa</option>
+                    <option value="Banho" {% if categoria == "Banho" %}selected{% endif %}>Banho</option>
+                    <option value="Aviamentos" {% if categoria == "Aviamentos" %}selected{% endif %}>Aviamentos</option>
+                </select>
+            </div>
+            <div class="col-md-12 text-end">
+                <button class="btn btn-dark" type="submit">Buscar</button>
+            </div>
+        </form>
+
+        <!-- Tabela para exibir os produtos -->
+        <table class="table table-hover table-striped mt-3 bg-white shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Cód. Interno</th>
+                    <th>Cód. Barras</th>
+                    <th>Categoria</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                    <th>Fornecedor</th>
+                    <th>Data de Entrada</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if produtos %}
+                    {% for produto in produtos %}
+                    <tr>
+                        <td>{{ produto[0] }}</td> <!-- ID -->
+                        <td>{{ produto[1] }}</td> <!-- Nome -->
+                        <td>{{ produto[2] }}</td> <!-- Descrição -->
+                        <td>{{ produto[3] }}</td> <!-- Código Interno -->
+                        <td>{{ produto[4] }}</td> <!-- Código de Barras -->
+                        <td>{{ produto[5] }}</td> <!-- Categoria -->
+                        <td>
+                            {{ produto[6] }} 
+                            {% if produto[9] == "Pack" %}
+                                (Pack)
+                            {% else %}
+                                (Unidade)
+                            {% endif %}
+                        </td> <!-- Quantidade com indicação de tipo -->
+                        <td>R$ {{ "%.2f"|format(produto[7]) }}</td> <!-- Preço -->
+                        <td>{{ produto[8] }}</td> <!-- Fornecedor -->
+                        <td>{{ produto[10].strftime("%d/%m/%Y") }}</td> <!-- Data de Entrada -->
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="10" class="text-center">Nenhum produto encontrado.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

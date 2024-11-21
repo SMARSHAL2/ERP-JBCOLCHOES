@@ -1,0 +1,37 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+}
+
+h2 {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.table-dark {
+    background-color: #343a40;
+    color: white;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1400px;
+    margin: auto;
+}
+
+
+.table-hover tbody tr {
+    line-height: 2;
+}
+
+
+.table-hover td, .table-hover th {
+    padding: 1rem;
+}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produtos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}">
+</head>
+
+<body class="bg-light" onload="atualizarQuantidade()">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <a class="navbar-brand ms-3" href="/">JB Colchões ERP</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="/">Cadastro de Produtos</a>
+            <a class="nav-link" href="{{ url_for('estoque') }}">Controle de Estoque</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="text-center text-dark">Cadastro de Produtos</h2>
+
+        <form action="{{ url_for('add_produto') }}" method="POST" class="bg-white p-4 rounded shadow-sm mt-3"
+            onsubmit="limparPrecoParaEnvio()">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome do Produto</label>
+                <input type="text" class="form-control" name="nome" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição</label>
+                <textarea class="form-control" name="descricao" rows="3"></textarea>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="codigo_interno" class="form-label">Código Interno</label>
+                    <input type="text" class="form-control" name="codigo_interno">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="codigo_barras" class="form-label">Código de Barras</label>
+                    <input type="text" class="form-control" name="codigo_barras">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoria</label>
+                <select class="form-select" name="categoria">
+                    <option value="Colchão">Colchão</option>
+                    <option value="Enxoval">Enxoval</option>
+                    <option value="Cama">Cama</option>
+                    <option value="Mesa">Mesa</option>
+                    <option value="Banho">Banho</option>
+                    <option value="Aviamentos">Aviamentos</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="tipo_embalagem" class="form-label">Tipo de Embalagem</label>
+                <select class="form-select" name="tipo_embalagem" onchange="atualizarQuantidade()">
+                    <option value="Unidade">Unidade</option>
+                    <option value="Pack">Pack</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="quantidade" class="form-label">Quantidade</label>
+                    <select class="form-select" name="quantidade" style="display:none;">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="25">25</option>
+                        <option value="30">30</option>
+                        <option value="35">35</option>
+                        <option value="40">40</option>
+                        <option value="45">45</option>
+                        <option value="50">50</option>
+                    </select>
+                    <input type="number" class="form-control" name="quantidade_livre" min="1">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="preco" class="form-label">Preço (R$)</label>
+                    <input type="text" class="form-control" name="preco" oninput="formatarPreco(this)" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="fornecedor" class="form-label">Fornecedor</label>
+                <input type="text" class="form-control" name="fornecedor">
+            </div>
+
+            <button type="submit" class="btn btn-dark w-100">Adicionar Produto</button>
+        </form>
+    </div>
+</body>
+<script>
+    function atualizarQuantidade() {
+        const tipoEmbalagem = document.querySelector('select[name="tipo_embalagem"]').value;
+        const quantidade = document.querySelector('select[name="quantidade"]');
+        const quantidadeLivre = document.querySelector('input[name="quantidade_livre"]');
+
+        if (tipoEmbalagem === 'Pack') {
+            quantidade.style.display = 'block';
+            quantidade.required = true;
+            quantidadeLivre.style.display = 'none';
+            quantidadeLivre.required = false;
+        } else {
+            quantidade.style.display = 'none';
+            quantidade.required = false;
+            quantidadeLivre.style.display = 'block';
+            quantidadeLivre.required = true;
+        }
+    }
+
+    function formatarPreco(precoInput) {
+        let valor = parseFloat(precoInput.value.replace(/\D/g, '')) / 100;
+        if (!isNaN(valor)) {
+            precoInput.value = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+    }
+
+    // Função para limpar a formatação do preço antes de enviar o formulário
+    function limparPrecoParaEnvio() {
+        const precoInput = document.querySelector('input[name="preco"]');
+        precoInput.value = precoInput.value.replace(/[^\d,]/g, '').replace(',', '.');
+    }
+</script>
+
+</html>
