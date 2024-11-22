@@ -4,7 +4,7 @@ import psycopg2
 app = Flask(__name__, template_folder="templates")
 
 # Configurações do PostgreSQL
-DB_HOST = "localhost"
+DB_HOST = "26.67.60.27"
 DB_NAME = "erpdatabase"
 DB_USER = "postgres"
 DB_PASSWORD = "18122003"
@@ -82,6 +82,66 @@ def add_produto():
     cursor.close()
     conn.close()
     return redirect(url_for('estoque'))
+
+@app.route('/entrada-saida', methods=['GET', 'POST'])
+def entrada_saida():
+    if request.method == 'POST':
+        # Capturar os dados do formulário
+        codigo_interno = request.form['codigo_interno']
+        quantidade = int(request.form['quantidade'])
+        tipo = request.form['tipo']  # 'entrada' ou 'saida'
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Verificar se o produto existe
+        cursor.execute("SELECT quantidade FROM produtos WHERE codigo_interno = %s", (codigo_interno,))
+        produto = cursor.fetchone()
+        
+        if not produto:
+            conn.close()
+            return "Produto não encontrado.", 404
+        
+        # Atualizar a quantidade com base no tipo
+        nova_quantidade = produto[0] + quantidade if tipo == 'entrada' else produto[0] - quantidade
+        
+        if nova_quantidade < 0:
+            conn.close()
+            return "Quantidade insuficiente para saída.", 400
+        
+        cursor.execute(
+            "UPDATE produtos SET quantidade = %s WHERE codigo_interno = %s",
+            (nova_quantidade, codigo_interno)
+        )
+        conn.commit()
+        
+        # Registrar a movimentação na tabela 'movimentacoes'
+        cursor.execute(
+            """
+            INSERT INTO movimentacoes (produto, tipo, quantidade)
+            VALUES (%s, %s, %s)
+            """,
+            (codigo_interno, tipo, quantidade)
+        )
+        conn.commit()
+        
+        cursor.close()
+        conn.close()
+        return redirect(url_for('entrada_saida'))
+    
+    # Caso GET, buscar histórico
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT id, produto, tipo, quantidade, data 
+        FROM movimentacoes 
+        ORDER BY data DESC
+    """)
+    historico = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('entrada_saida.html', historico=historico)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

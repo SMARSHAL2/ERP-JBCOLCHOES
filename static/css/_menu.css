@@ -1,0 +1,27 @@
+/* Estilização exclusiva para o menu */
+.menu-principal {
+    background-color: #003366;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1)
+    
+}
+
+.menu-principal .navbar-brand {
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.menu-principal .nav-link {
+    color: #f8f9fa; 
+    margin-right: 15px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.menu-principal .nav-link:hover {
+    color: #a3c2f4;
+}
+
+.menu-principal .nav-link.active {
+    color: #c2e0f4;
+    text-decoration: underline;
+}

@@ -29,3 +29,19 @@ h2 {
     max-width: 600px;
     margin: auto;
 }
+
+
+#novo_registro {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 128, 0, 0.8); /* Fundo verde semi-transparente */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    display: none;
+}

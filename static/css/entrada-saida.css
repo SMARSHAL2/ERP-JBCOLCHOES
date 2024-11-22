@@ -1,0 +1,15 @@
+/* Estilização do formulário */
+form {
+    border: 1px solid #ddd;
+}
+
+/* Tabela */
+.table-hover tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+/* Título */
+h2 {
+    color: #003366;
+    margin-bottom: 20px;
+}

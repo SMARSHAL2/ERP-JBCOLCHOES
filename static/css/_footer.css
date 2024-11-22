@@ -1,0 +1,21 @@
+.footer-principal{
+    margin-top: 200px;
+    width: 100%;
+}
+
+.footer-principal .powered-by {
+    font-size: 0.9rem;
+    color: #f8f9fa;
+    margin-top: 200px;
+}
+
+.footer-principal .text-highlight {
+    color: #ffee00;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.footer-principal .text-highlight:hover {
+    color: #b6ac21;
+    text-decoration: underline;
+}

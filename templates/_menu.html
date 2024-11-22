@@ -1,0 +1,12 @@
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/_menu.css') }}">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <a class="navbar-brand ms-3" href="/">JB Colchões ERP</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="/">Cadastro de Produtos</a>
+            <a class="nav-link" href="{{ url_for('estoque') }}">Controle de Estoque</a>
+            <a class="nav-link" href="{{ url_for('entrada_saida') }}">Entrada/Saida</a>
+        </div>
+    </nav>
